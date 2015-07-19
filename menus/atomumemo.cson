@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'New memo'
+      'command': 'atomumemo:create'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'atomumemo'
+      'submenu': [
+        {
+          'label': 'New memo'
+          'command': 'atomumemo:create'
+        }
+      ]
+    ]
+  }
+]
