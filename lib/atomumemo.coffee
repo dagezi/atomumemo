@@ -1,35 +1,23 @@
-AtomumemoView = require './atomumemo-view'
 {CompositeDisposable} = require 'atom'
+{sprintf} = require 'sprintf'
 
 module.exports = Atomumemo =
-  atomumemoView: null
-  modalPanel: null
   subscriptions: null
+  universes:
+    default:
+      dir: "file:///tmp/mumemo"
 
   activate: (state) ->
-    console.log 'atomumemo activate'
-    @atomumemoView = new AtomumemoView(state.atomumemoViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @atomumemoView.getElement(), visible: false)
-
-    # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
-
-    # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace', 'atomumemo:create': => @createFile()
-    console.log 'atomumemo activate done'
 
   deactivate: ->
-    @modalPanel.destroy()
     @subscriptions.dispose()
-    @atomumemoView.destroy()
-
-  serialize: ->
-    atomumemoViewState: @atomumemoView.serialize()
 
   createFile: ->
-    console.log 'Atomumemo was toggled!'
-
-    if @modalPanel.isVisible()
-      @modalPanel.hide()
-    else
-      @modalPanel.show()
+    console.log "createFile"
+    date = new Date()
+    uri = sprintf('%s/%4d/%02d/%02d-%02d%02d%02d.md',
+      @universes.default.dir, date.getYear() + 1900, date.getMonth(), date.getDate(),
+      date.getHours(), date.getMinutes(), date.getSeconds())
+    atom.workspace.open(uri)
