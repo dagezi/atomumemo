@@ -1,11 +1,14 @@
 {CompositeDisposable} = require 'atom'
+path = require 'path'
 {sprintf} = require 'sprintf'
+
+Universe = require './universe'
 
 module.exports = Atomumemo =
   subscriptions: null
-  universes:
-    default:
-      dir: "file:///tmp/mumemo"
+  universes: [
+    new Universe name: "default", dir: "c:\\tmp\\mumemo"
+  ]
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
@@ -15,9 +18,11 @@ module.exports = Atomumemo =
     @subscriptions.dispose()
 
   createFile: ->
-    console.log "createFile"
     date = new Date()
-    uri = sprintf('%s/%4d/%02d/%02d-%02d%02d%02d.md',
-      @universes.default.dir, date.getYear() + 1900, date.getMonth(), date.getDate(),
-      date.getHours(), date.getMinutes(), date.getSeconds())
+    uri = path.join(
+      @universes[0]?.getDir(),
+      sprintf('%4d', date.getYear() + 1900),
+      sprintf('%02d', date.getMonth()),
+      sprintf('%02d-%02d%02d%02d.md'
+        date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
     atom.workspace.open(uri)
