@@ -20,7 +20,7 @@ class Universe
     date ||= new Date()
     newPath = path.join(
       sprintf('%4d', date.getYear() + 1900),
-      sprintf('%02d', date.getMonth()),
+      sprintf('%02d', date.getMonth() + 1),
       sprintf('%02d-%02d%02d%02d.md'
         date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()))
     memo = new Memo universe: this, path: newPath
